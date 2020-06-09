@@ -96,7 +96,7 @@ parseTag txt = case txt of
     "Lemma"       -> Just Lemma
     "Proposition" -> Just Proposition
     "Prop"        -> Just Proposition
-    "Note"        -> Just Note
+    "Note"        -> Just Env.Note
     "Corollary"   -> Just Corollary
     "Pf"          -> Just Proof
     "Proof"       -> Just Proof
@@ -121,7 +121,7 @@ getLatexEnvName e = case e of
     Corollary   -> "corollary"
     Example     -> "example"
     Assumption  -> "assumption"
-    Note        -> "note"
+    Env.Note        -> "note"
 
 -- Splits term text into the metadata of a LaTeX environment.
 -- TODO: Add support for nested parens, e.g. "Definition (O(n) runtime)."

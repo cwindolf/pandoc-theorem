@@ -23,7 +23,7 @@ data Env = Env
     deriving (Show, Eq)
 
 -- | Type of a LaTeX environment. Corresponds to a unique environment name.
-data Tag = Definition | Lemma | Theorem | Corollary | Proposition | Proof | Problem | Claim | Example | Assumption
+data Tag = Definition | Lemma | Theorem | Corollary | Proposition | Proof | Problem | Claim | Example | Assumption | Note
     deriving (Show, Eq)
 
 -- Aliases for terms in a DefinitionList.
@@ -94,11 +94,13 @@ parseTag txt = case txt of
     "Def"         -> Just Definition
     "Definition"  -> Just Definition
     "Lemma"       -> Just Lemma
-    "Proposition" -> Just Proposition 
+    "Proposition" -> Just Proposition
+    "Prop"        -> Just Proposition
+    "Note"        -> Just Note
     "Corollary"   -> Just Corollary
     "Pf"          -> Just Proof
     "Proof"       -> Just Proof
-    "Problem"     -> Just Problem 
+    "Problem"     -> Just Problem
     "Thm"         -> Just Theorem
     "Theorem"     -> Just Theorem
     "Ex"          -> Just Example
@@ -119,6 +121,7 @@ getLatexEnvName e = case e of
     Corollary   -> "corollary"
     Example     -> "example"
     Assumption  -> "assumption"
+    Note        -> "note"
 
 -- Splits term text into the metadata of a LaTeX environment.
 -- TODO: Add support for nested parens, e.g. "Definition (O(n) runtime)."

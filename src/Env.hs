@@ -68,17 +68,17 @@ makeEnv (tag, name, rest) defs
     -- TODO: Might be useful to have this work with formatted tags, e.g. **Lemma**.
     toRawText :: Seq Inline -> Text
     toRawText S.Empty      = ""
-    toRawText (Str s:<|xs) = (s) `T.append` (toRawText xs)
+    toRawText (Str s:<|xs) = s `T.append` (toRawText xs)
     toRawText (Space:<|xs) = " " `T.append` (toRawText xs)
     toRawText (_    :<|xs) = toRawText xs
 
 -- Defines the first and last blocks of the TeX environment.
 makeDelimiters :: Tag -> Maybe String -> Inlines -> (Blocks, Block)
 makeDelimiters tagText nameText rest =
-    ( plain $ (rawInline "latex" $ T.pack $ "\\begin{" ++ tag ++ "}" ++ name) <> rest
+    ( plain $ (rawInline "latex" $ T.pack("\\begin{" ++ tag ++ "}" ++ name)) <> rest
       -- Closing block may be merged into the final body block, so keep it
       -- independent of other blocks for now.
-    , Plain [RawInline (Format "latex") $ T.pack ("\\end{" ++ tag ++ "}")]
+    , Plain [RawInline (Format "latex") (T.pack("\\end{" ++ tag ++ "}"))]
     )
   where
     tag  = getLatexEnvName tagText
@@ -139,7 +139,7 @@ splitTerm xs =
     closesParen = checkStr (T.isSuffixOf ")")
 
 checkStr :: (Text -> Bool) -> Inline -> Bool
-checkStr f (Str s) = f (s)
+checkStr f (Str s) = f s
 checkStr _ _       = False
 
 trimParens :: Seq Inline -> Seq Inline
@@ -169,7 +169,7 @@ dropPrefix :: Text -> Inline -> Inline
 dropPrefix = transformStr . T.stripPrefix
 
 transformStr :: (Text -> Maybe Text) -> Inline -> Inline
-transformStr f i@(Str s) = case f (s) of
+transformStr f i@(Str s) = case f s of
     Just s' -> Str $ s'
     Nothing -> i
 transformStr _ i = i
